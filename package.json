@@ -1,7 +1,7 @@
 {
 	"name": "@roastery/barista",
 	"description": "Elysia HTTP server factory for the Roastery CMS ecosystem",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"type": "module",
 	"author": {
 		"name": "Alan Reis",
@@ -63,7 +63,9 @@
 	"peerDependencies": {
 		"typescript": "^5",
 		"@types/bun": "latest",
-		"tsup": "^8.5.1",
+		"tsup": "^8.5.1"
+	},
+	"dependencies": {
 		"elysia": "^1.4.27"
 	}
 }
