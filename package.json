@@ -1,7 +1,7 @@
 {
 	"name": "@roastery/barista",
 	"description": "Elysia HTTP server factory for the Roastery CMS ecosystem",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"type": "module",
 	"author": {
 		"name": "Alan Reis",
