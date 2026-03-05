@@ -1,0 +1,69 @@
+{
+	"name": "@roastery/barista",
+	"description": "Elysia HTTP server factory for the Roastery CMS ecosystem",
+	"version": "0.0.1",
+	"type": "module",
+	"author": {
+		"name": "Alan Reis",
+		"email": "alanreisanjo@gmail.com",
+		"url": "https://github.com/Hoyasumii"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/roastery-cms/terroir"
+	},
+	"license": "MIT",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"keywords": [
+		"hoyasumii",
+		"roastery",
+		"@roastery",
+		"barista",
+		"@roastery/barista",
+		"roastery-barista"
+	],
+	"typesVersions": {
+		"*": {
+			"*": [
+				"./dist/*/index.d.ts"
+			]
+		}
+	},
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		},
+		"./*": {
+			"types": "./dist/*/index.d.ts",
+			"import": "./dist/*/index.js",
+			"require": "./dist/*/index.cjs"
+		}
+	},
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"build": "biome check --fix && tsup 'src/**/index.ts' --format cjs,esm --dts --tsconfig tsconfig.build.json --clean",
+		"test:unit": "bun test --env-file=.env.testing",
+		"test:coverage": "bun test --env-file=.env.testing --coverage",
+		"setup": "bun run build && bun link",
+		"prepare": "husky || true",
+		"knip": "knip"
+	},
+	"devDependencies": {
+		"@commitlint/cli": "^20.4.1",
+		"@commitlint/config-conventional": "^20.4.1",
+		"husky": "^9.1.7",
+		"knip": "^5.85.0"
+	},
+	"peerDependencies": {
+		"typescript": "^5",
+		"@types/bun": "latest",
+		"tsup": "^8.5.1",
+		"elysia": "^1.4.27"
+	}
+}
