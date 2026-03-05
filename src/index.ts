@@ -5,3 +5,5 @@ export function barista<BasePath extends string = "">(
 ) {
 	return new Elysia(config);
 }
+
+export type Barista = Elysia;
