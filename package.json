@@ -1,7 +1,7 @@
 {
 	"name": "@roastery/barista",
 	"description": "Elysia HTTP server factory for the Roastery CMS ecosystem",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"type": "module",
 	"author": {
 		"name": "Alan Reis",
@@ -10,7 +10,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/roastery-cms/terroir"
+		"url": "https://github.com/roastery-cms/barista"
 	},
 	"license": "MIT",
 	"main": "./dist/index.cjs",
