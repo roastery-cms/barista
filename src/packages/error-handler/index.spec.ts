@@ -1,4 +1,7 @@
-import { describe, it, expect } from "bun:test";
+import { describe, it, expect, beforeEach } from "bun:test";
+import Elysia from "elysia";
+import { createAroma } from "@roastery/aroma";
+import { NullTransport } from "@roastery/aroma/transports";
 import { errorHandler } from "./index";
 import {
 	BadRequestException,
@@ -30,10 +33,21 @@ import {
 	InvalidObjectValueException,
 	UnknownException,
 } from "@roastery/terroir/exceptions";
-import { barista } from "@roastery/barista";
 
 /**
- * Builds a minimal Barista app wired with the {@link errorHandler} plugin whose
+ * Shared logger for every case in this file. A {@link NullTransport} captures
+ * each event `errorHandler` emits in memory so the logging behaviour can be
+ * asserted without touching stdout/stderr.
+ */
+const sink = new NullTransport();
+const logger = createAroma({ transports: [sink] });
+
+beforeEach(() => {
+	sink.clear();
+});
+
+/**
+ * Builds a minimal Elysia app wired with the {@link errorHandler} plugin whose
  * single `/test` route always throws the provided value, so the handler's
  * mapping of that error can be asserted.
  *
@@ -42,11 +56,9 @@ import { barista } from "@roastery/barista";
  * @returns The configured app instance.
  */
 function createTestApp(error: unknown) {
-	return barista()
-		.use(errorHandler)
-		.get("/test", () => {
-			throw error;
-		});
+	return new Elysia().use(errorHandler(logger)).get("/test", () => {
+		throw error;
+	});
 }
 
 /**
@@ -299,6 +311,55 @@ describe("baristaErrorHandler", () => {
 		it("uses status 500 as a fallback when the exception is not mapped", async () => {
 			const { status } = await request(createTestApp(new UnknownException()));
 			expect(status).toBe(500);
+		});
+	});
+
+	describe("logging", () => {
+		it("uses the injected logger instance to record the failure", async () => {
+			await request(createTestApp(new Error("boom")));
+			expect(sink.events).toHaveLength(1);
+		});
+
+		it("logs route, method, status, name and message for a generic Error", async () => {
+			await request(createTestApp(new TypeError("invalid type")));
+
+			const event = sink.events[0];
+			expect(event?.level).toBe("error");
+			expect(event?.msg).toBe("invalid type");
+			expect(event?.meta).toMatchObject({
+				name: "TypeError",
+				route: "/test",
+				method: "GET",
+				status: 500,
+			});
+		});
+
+		it("logs source and layer for a CoreException", async () => {
+			await request(
+				createTestApp(
+					new BadRequestException("UserController", "missing field"),
+				),
+			);
+
+			const event = sink.events[0];
+			expect(event?.level).toBe("error");
+			expect(event?.msg).toBe("missing field");
+			expect(event?.meta).toMatchObject({
+				source: "UserController",
+				layer: "application",
+				route: "/test",
+				method: "GET",
+				status: 400,
+			});
+			expect(event?.meta).toHaveProperty("name");
+		});
+
+		it("logs exactly one event per failing request against the same sink", async () => {
+			await request(createTestApp(new Error("first")));
+			await request(createTestApp(new Error("second")));
+
+			expect(sink.events).toHaveLength(2);
+			expect(sink.events[1]?.msg).toBe("second");
 		});
 	});
 });

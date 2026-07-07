@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1]
+
+### Changed
+
+- `barista` now constructs a single shared `@roastery/aroma` logger instance
+  and injects it into both `errorHandler` and `requestTrace`, instead of each
+  plugin building its own logger internally from `aromaArgs`.
+- **Breaking:** `errorHandler` and `requestTrace` now take a required
+  `logger: ILogger` parameter instead of an optional
+  `aromaArgs?: CreateAromaArgs`. Consumers calling these plugins directly
+  (outside of `barista`) must construct a logger themselves — e.g.
+  `errorHandler(createAroma(aromaArgs))` — and pass it in.
+- Bumped `@roastery/beans` from `^0.1.0` to `^0.1.2`.
+
+### Fixed
+
+- Error logs (`errorHandler`) and access logs (`requestTrace`) no longer risk
+  diverging configuration (redaction rules, custom processors, the `onError`
+  callback) since they now always share the exact same logger instance
+  produced by `barista`, rather than each independently re-deriving one from
+  the same `aromaArgs`.
+
 ## [0.1.0]
 
 ### Added

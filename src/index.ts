@@ -162,12 +162,14 @@ export function barista<
 	corsConfig,
 	healthCheck,
 }: BaristaArgs<ContentType, BasePath> = {}): Barista<ContentType, BasePath> {
+	const aroma = createAroma(aromaArgs);
+
 	const app = new Elysia(config ?? {})
 		.use(cors(corsConfig))
-		.decorate("aroma", createAroma(aromaArgs))
-		.use(errorHandler(aromaArgs))
+		.decorate("aroma", aroma)
+		.use(errorHandler(aroma))
 		.use(responseMapper())
-		.use(requestTrace(aromaArgs))
+		.use(requestTrace(aroma))
 		.use(
 			env<ContentType>(...(environmentDTOs ?? ([] as unknown as ContentType))),
 		)

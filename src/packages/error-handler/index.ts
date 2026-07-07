@@ -2,7 +2,7 @@ import { CoreException } from "@roastery/terroir/exceptions/core";
 import { STATUS_CODE_MAP } from "./constants";
 import { ExceptionLayer } from "@roastery/terroir/exceptions/symbols";
 import Elysia from "elysia";
-import { createAroma, type CreateAromaArgs } from "@roastery/aroma";
+import type { ILogger } from "@roastery/aroma/types";
 
 /**
  * Elysia plugin that installs a global error handler, translating thrown
@@ -23,8 +23,10 @@ import { createAroma, type CreateAromaArgs } from "@roastery/aroma";
  * Every error is logged with request context (route, method, headers, body,
  * resolved status) via the `aroma` decorator before the body is returned.
  *
- * @param aromaArgs - Options forwarded to `createAroma` for the logger this
- *   handler decorates the app with. Omit to use the logger defaults.
+ * @param logger - The `@roastery/aroma` logger instance this handler decorates
+ *   the app with and reports every failure through. Callers should share a
+ *   single instance across the app's plugins (see `barista`) rather than
+ *   constructing a new one per plugin.
  *
  * @returns A global-scoped `Elysia` plugin registering the `onError` handler
  *   and an `aroma` logger decorator.
@@ -32,10 +34,13 @@ import { createAroma, type CreateAromaArgs } from "@roastery/aroma";
  * @example
  * ```typescript
  * import { Elysia } from "elysia";
+ * import { createAroma } from "@roastery/aroma";
  * import { errorHandler } from "@roastery/barista/packages/error-handler";
  *
+ * const logger = createAroma();
+ *
  * const app = new Elysia()
- *   .use(errorHandler())
+ *   .use(errorHandler(logger))
  *   .get("/", () => {
  *     throw new BadRequestException("UserController", "missing field");
  *   });
@@ -44,9 +49,9 @@ import { createAroma, type CreateAromaArgs } from "@roastery/aroma";
  *
  * @see {@link STATUS_CODE_MAP} — the layer/exception-name → status lookup table.
  */
-export function errorHandler(aromaArgs?: CreateAromaArgs) {
+export function errorHandler(logger: ILogger) {
 	return new Elysia()
-		.decorate("aroma", createAroma(aromaArgs))
+		.decorate("aroma", logger)
 		.onError(
 			{ as: "global" },
 			({ code, set, error: _error, aroma, body, headers, route, request }) => {

@@ -1,4 +1,4 @@
-import { createAroma, type CreateAromaArgs } from "@roastery/aroma";
+import type { ILogger } from "@roastery/aroma/types";
 import Elysia from "elysia";
 
 /**
@@ -11,17 +11,19 @@ import Elysia from "elysia";
  * and headers. Failed requests are intentionally skipped here — they are logged
  * by {@link errorHandler} instead — so each request produces exactly one log line.
  *
- * @param aromaArgs - Options forwarded to `createAroma` for the logger this
- *   plugin decorates the app with. Omit to use the logger defaults.
+ * @param logger - The `@roastery/aroma` logger instance this plugin decorates
+ *   the app with and logs every successful request through. Pass the same
+ *   instance used by the rest of the pipeline (see `barista`) so access and
+ *   error logs share one logger.
  *
  * @returns A global-scoped `Elysia` plugin registering the trace handler and an
  *   `aroma` logger decorator.
  *
  * @see {@link errorHandler} — logs the failed requests this plugin skips.
  */
-export function requestTrace(aromaArgs?: CreateAromaArgs) {
+export function requestTrace(logger: ILogger) {
 	return new Elysia()
-		.decorate("aroma", createAroma(aromaArgs))
+		.decorate("aroma", logger)
 		.trace({ as: "global" }, ({ context, onAfterResponse }) => {
 			const { aroma, request, body, headers, set } = context;
 

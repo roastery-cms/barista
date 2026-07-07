@@ -1,7 +1,7 @@
 {
 	"name": "@roastery/barista",
 	"description": "Elysia HTTP server factory for the Roastery CMS ecosystem",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"type": "module",
 	"author": {
 		"name": "Alan Reis",
@@ -69,7 +69,7 @@
 		"@elysia/cors": "^1.4.2",
 		"@elysia/eden": "^1.4.10",
 		"@roastery/aroma": "^0.0.3",
-		"@roastery/beans": "^0.1.0",
+		"@roastery/beans": "^0.1.2",
 		"@roastery/terroir": "^0.1.0",
 		"elysia": "^1.4.29",
 		"elysia-healthcheck": "^1.0.0"

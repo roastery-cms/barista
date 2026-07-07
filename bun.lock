@@ -8,7 +8,7 @@
         "@elysia/cors": "^1.4.2",
         "@elysia/eden": "^1.4.10",
         "@roastery/aroma": "^0.0.3",
-        "@roastery/beans": "^0.1.0",
+        "@roastery/beans": "^0.1.2",
         "@roastery/terroir": "^0.1.0",
         "elysia": "^1.4.29",
         "elysia-healthcheck": "^1.0.0",
@@ -187,7 +187,7 @@
 
     "@roastery/aroma": ["@roastery/aroma@0.0.3", "", { "dependencies": { "@roastery/terroir": "^0.1.0" }, "peerDependencies": { "@opentelemetry/api": "^1", "@types/bun": "latest", "tsup": "^8.5.1", "typescript": "^5" }, "optionalPeers": ["@opentelemetry/api"] }, "sha512-jNws447lgJNf776xD/4qt61DdaPFeQ1nS0xw9rz5T0Y+IU5wddlMxuwJ//GRiZe5bhjS8CTysIX74JHCu1vFRQ=="],
 
-    "@roastery/beans": ["@roastery/beans@0.1.0", "", { "dependencies": { "@roastery/terroir": "^0.1.0", "slugify": "^1.6.6" }, "peerDependencies": { "@types/bun": "latest", "tsup": "^8.5.1", "typescript": "^5.9.3" } }, "sha512-Q3wQVZKhwsaFqyumtJRqVFTNYMGmG4curaktJd4nHKL05fBHOvs+yySLzpsbe/2CC9JKpVj44HxEvbgYlYftVw=="],
+    "@roastery/beans": ["@roastery/beans@0.1.2", "", { "dependencies": { "@roastery/terroir": "^0.1.0", "slugify": "^1.6.6" }, "peerDependencies": { "@types/bun": "latest", "tsup": "^8.5.1", "typescript": "^5.9.3" } }, "sha512-7Nivxek4naCP4P60lwKHNbVe+WSUqeDaWssCtooJvReWDo/eqRcaG8MVe6pguhjzh0rR2qiFE5IcECLXxJ+oVQ=="],
 
     "@roastery/terroir": ["@roastery/terroir@0.1.0", "", { "dependencies": { "@sinclair/typebox": ">= 0.34.0 < 1", "uuid": "^13.0.0" }, "peerDependencies": { "@types/bun": "latest", "tsup": "^8.5.1", "typescript": "^5" } }, "sha512-aEH/EwYbyHKGpScCF29mcju/e/8+hoYNSs/c9XQ1Cnyt5VzsvGBOLe8fYRxZp8ht2x1yiGUj+EdakQtblMe04A=="],
 
